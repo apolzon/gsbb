@@ -4,6 +4,7 @@ require 'rake/testtask'
 require 'cucumber'
 require 'cucumber/rake/task'
 require 'rdoc/task'
+require 'grit'
 
 
 require "bundler/gem_tasks"

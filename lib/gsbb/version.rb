@@ -1,3 +1,3 @@
-module Gsbb
+class Gsbb < Thor
   VERSION = "0.0.1"
 end

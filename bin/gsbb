@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require "rubygems" # ruby1.9 doesn't "require" it though
 require "thor"
+require "grit"
+require 'date'
 require File.expand_path(File.join(__FILE__, '..', '..', 'lib', 'gsbb'))
 
 Gsbb.start
