@@ -27,10 +27,25 @@ class Gsbb < Thor
 
   desc "prune", "Remove all stale branches from remote"
   def prune
+    puts "Pruning:"
+    stale_branches.each do |branch|
+      name = branch.name.split("/").last
+
+      # Grit breaks here:
+      # puts repo.git.native(:push, {:raise => true}, "origin :#{name}")
+
+      puts `git push origin :#{name}`
+
+      if repo.heads.map(&:name).include?(name)
+        puts `git branch -D #{name}`
+      end
+    end
   end
 
   desc "email", "Email each stale branch author requesting branch removal"
   def email
-    branch.commit.to_hash['committer']['email'] # win!
+    stale_branches.each do |branch|
+      puts branch.commit.to_hash['committer']['email'] # win!
+    end
   end
 end
