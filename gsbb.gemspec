@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["apolzon@gmail.com"]
   s.homepage    = "http://github.com/apolzon/gsbb"
   s.summary     = %q{Find and kill and blame those worthless stale branches}
-  s.description = %q{See summary}
+  s.description = %q{Find and kill and blame those worthless stale branches}
 
   s.rubyforge_project = "gsbb"
 
