@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
+require 'thor'
 require "gsbb/version"
 
 Gem::Specification.new do |s|
@@ -7,9 +8,9 @@ Gem::Specification.new do |s|
   s.version     = Gsbb::VERSION
   s.authors     = ["Chris Apolzon"]
   s.email       = ["apolzon@gmail.com"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.homepage    = "http://github.com/apolzon/gsbb"
+  s.summary     = %q{Find and kill and blame those worthless stale branches}
+  s.description = %q{See summary}
 
   s.rubyforge_project = "gsbb"
 
@@ -22,7 +23,6 @@ Gem::Specification.new do |s|
   # s.add_development_dependency "rspec"
   # s.add_runtime_dependency "rest-client"
   s.add_development_dependency "aruba"
-  s.add_development_dependency "mocha"
   s.add_dependency "thor"
   s.add_dependency "grit"
 end
