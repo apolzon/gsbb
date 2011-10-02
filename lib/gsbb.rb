@@ -1,9 +1,11 @@
+require 'grit'
+require 'thor'
 class Gsbb < Thor
   no_tasks do
     def stale_branches
       @stale_branches ||= branches.select do |branch|
         commit = branch.commit
-        commit.authored_date.to_date < (Date.today - 21)
+        commit.authored_date.to_date < (Date.today + 21)
       end
     end
 
@@ -19,10 +21,12 @@ class Gsbb < Thor
 
   desc "show", "List stale branches"
   def show
-    puts "Stale Branches:"
+    output = "Stale Branches:\n"
     stale_branches.each do |branch|
-      puts "#{branch.name} - #{branch.commit.author}, #{(Date.today - branch.commit.authored_date.to_date).to_i} days old - #{branch.commit.authored_date.to_date}"
+      output << "#{branch.name} - #{branch.commit.author}, #{(Date.today - branch.commit.authored_date.to_date).to_i} days old - #{branch.commit.authored_date.to_date}"
     end
+    puts output unless ENV['test']
+    output
   end
 
   desc "prune", "Remove all stale branches from remote"
