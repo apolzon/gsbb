@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "pry"
   s.add_development_dependency "mocha"
+  s.add_development_dependency "turn"
   s.add_dependency "thor"
   s.add_dependency "grit"
 end
