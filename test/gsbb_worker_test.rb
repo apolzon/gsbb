@@ -69,6 +69,11 @@ describe GsbbWorker do
       GsbbWorker.non_merged
     end
   end
+  describe ".fake_method" do
+    it "raises no method error" do
+      lambda { GsbbWorker.fake_method }.must_raise(NoMethodError)
+    end
+  end
 
   #describe ".output_variables"
   #
