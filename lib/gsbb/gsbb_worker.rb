@@ -1,4 +1,5 @@
 require 'yaml'
+
 class GsbbWorker
   def self.read_config
     if File.exists?("#{ENV['HOME']}/.gsbb")
@@ -31,26 +32,6 @@ class GsbbWorker
     !!self.non_merged
   end
 
-  #def self.cutoff
-  #  read_config
-  #  @@cutoff
-  #end
-  #
-  #def self.output
-  #  read_config
-  #  @@output
-  #end
-  #
-  #def self.non_merged?
-  #  read_config
-  #  @@non_merged
-  #end
-  #
-  #def self.non_merged
-  #  read_config
-  #  @@non_merged
-  #end
-
   OUTPUT_VARIABLES = %w(%a %b %c)
 
   def self.output_variables
@@ -58,20 +39,6 @@ class GsbbWorker
   end
 
   def config
-    # how do we want to do this?
-    # gsbb config --cutoff="15 days"
-    # gsbb config --exclude="hackfest"
-    # gsbb config --only-non-merged
-
-    # ==================================
-
-    # gsbb config
-    # What do you want to change?
-    # 1. Cutoff Date
-    # 2. Exclusion Rule
-    # 3. Non-merged branch inclusion
-
-    # Enter new value (#{current_value})
   end
 
   def show

@@ -42,7 +42,7 @@ describe Gsbb do
     describe "flags" do
       it "allows setting the cut-off date" do
         Gsbb.start(["config", "--cutoff=15"])
-        # verify it updates the config file
+        # TODO: verify it updates the config file
       end
       it "allows setting the branch exclusion rule"
       it "allows configuring the output style"
