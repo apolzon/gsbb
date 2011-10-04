@@ -1,4 +1,11 @@
 class GsbbWorker
+
+  def self.cutoff; end
+  def self.output; end
+  def self.non_merged?; end
+  def self.non_merged; end
+  def self.output_variables; end
+
   def config
     # how do we want to do this?
     # gsbb config --cutoff="15 days"
@@ -21,8 +28,7 @@ class GsbbWorker
     stale_branches.each do |branch|
       output << "#{branch.name} - #{branch.commit.author}, #{(Date.today - branch.commit.authored_date.to_date).to_i} days old - #{branch.commit.authored_date.to_date}"
     end
-    puts output unless ENV['test']
-    output
+    puts output
   end
 
   def prune

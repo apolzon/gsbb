@@ -4,6 +4,7 @@ require 'pry'
 require 'turn'
 
 require File.expand_path(File.join(File.dirname(__FILE__), 'support', 'fake_grit'))
+require File.expand_path(File.join(File.dirname(__FILE__), 'support', 'capture_stdout'))
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'gsbb'))
 require 'mocha'
@@ -15,14 +16,17 @@ describe Gsbb do
       worker = mock
       worker.expects(:config)
       GsbbWorker.expects(:new).returns(worker)
-      Gsbb.start(["config"])
+      Gsbb.start(["config", "--cutoff=21"])
     end
 
     describe "no params" do
       it "outputs current options" do
-        Gsbb.start(["config"]).must_match /cutoff/
-        Gsbb.start(["config"]).must_match /output/
-        Gsbb.start(["config"]).must_match /non-merged/
+        output = capture_stdout do
+          Gsbb.start(["config"])
+        end
+        output.must_match /cutoff/
+        output.must_match /output/
+        output.must_match /non-merged/
       end
     end
     describe "flags" do
@@ -57,7 +61,7 @@ describe Gsbb do
 
       Grit::Repo.expects(:new).returns(repo)
 
-      output = Gsbb.start(["show"])
+      output = capture_stdout { Gsbb.start(["show"]) }
 
       output.must_match /Bobby Bobberson/
       output.must_match /branchname/
