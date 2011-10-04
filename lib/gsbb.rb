@@ -4,8 +4,9 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'gsbb', 'gsbb_worker'
 
 class Gsbb < Thor
   desc "config", "Configure overrides to default behavior"
-  method_options :cutoff => :integer, :output => :string, :non_merged => :boolean
+  method_options :cutoff => :numeric, :output => :string, :non_merged => :boolean
   def config
+    p options
     # options.force? # options['alias'] # options[:alias]
     test = "hi"
     if options.keys == []

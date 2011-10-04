@@ -35,6 +35,10 @@ describe Gsbb do
         output.must_match /MYOUTPUTSTRING/
         output.must_match /true/
       end
+      it "requires cutoff be numeric" do
+        output = capture_stderr { Gsbb.start(["config", "--cutoff=asdf"]) }
+        output.must_match /Expected numeric value/
+      end
     end
     describe "flags" do
       it "allows setting the cut-off date" do
