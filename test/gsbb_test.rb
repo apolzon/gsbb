@@ -1,12 +1,12 @@
 require 'minitest/spec'
 require 'minitest/autorun'
-require 'mocha'
 require 'pry'
 require 'turn'
 
 require File.expand_path(File.join(File.dirname(__FILE__), 'support', 'fake_grit'))
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'gsbb'))
+require 'mocha'
 ENV['test'] = 'true'
 
 describe Gsbb do
@@ -15,12 +15,24 @@ describe Gsbb do
       worker = mock
       worker.expects(:config)
       GsbbWorker.expects(:new).returns(worker)
-      Gsbb.new.config
+      Gsbb.start(["config"])
     end
-    it "allows setting the cut-off date"
-    it "allows setting the branch exclusion rule"
-    it "allows configuring the output style"
-    it "allows excluding non-merged branches by default"
+
+    describe "no params" do
+      it "outputs current options" do
+        Gsbb.start(["config"]).must_match /cutoff/
+        Gsbb.start(["config"]).must_match /output/
+        Gsbb.start(["config"]).must_match /non-merged/
+      end
+    end
+    describe "flags" do
+      it "allows setting the cut-off date" do
+        Gsbb.start(["config", "--cutoff=15"])
+      end
+      it "allows setting the branch exclusion rule"
+      it "allows configuring the output style"
+      it "allows excluding non-merged branches by default"
+    end
   end
 
   describe "#show" do
@@ -28,7 +40,7 @@ describe Gsbb do
       worker = mock
       worker.expects(:show)
       GsbbWorker.expects(:new).returns(worker)
-      Gsbb.new.show
+      Gsbb.start(["show"])
     end
     
     it "includes author and branch name in output" do
@@ -45,7 +57,7 @@ describe Gsbb do
 
       Grit::Repo.expects(:new).returns(repo)
 
-      output = Gsbb.new.show
+      output = Gsbb.start(["show"])
 
       output.must_match /Bobby Bobberson/
       output.must_match /branchname/
@@ -63,7 +75,7 @@ describe Gsbb do
       worker = mock
       worker.expects(:prune)
       GsbbWorker.expects(:new).returns(worker)
-      Gsbb.new.prune
+      Gsbb.start(["prune"])
     end
   end
 
@@ -72,7 +84,7 @@ describe Gsbb do
       worker = mock
       worker.expects(:email)
       GsbbWorker.expects(:new).returns(worker)
-      Gsbb.new.email
+      Gsbb.start(["email"])
     end
   end
 end
