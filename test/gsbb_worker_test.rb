@@ -39,6 +39,7 @@ describe GsbbWorker do
         GsbbWorker.read_config
         GsbbWorker.cutoff.must_equal 21
         GsbbWorker.output.wont_be_nil
+        GsbbWorker.non_merged.must_equal true
         GsbbWorker.non_merged?.must_equal true
       end
     end

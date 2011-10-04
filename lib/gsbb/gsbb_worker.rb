@@ -1,6 +1,5 @@
 require 'yaml'
 class GsbbWorker
-
   def self.read_config
     if File.exists?("#{ENV['HOME']}/.gsbb")
       configuration = File.read("#{ENV['HOME']}/.gsbb", "r")
@@ -19,25 +18,38 @@ class GsbbWorker
     end
   end
 
-  def self.cutoff
-    read_config
-    @@cutoff
-  end
-
-  def self.output
-    read_config
-    @@output
+  def self.method_missing(method_name, *args)
+    if method_name =~ /cutoff|output|non_merged/
+      read_config
+      class_variable_get "@@#{method_name}".to_sym
+    else
+      super method_name, *args
+    end
   end
 
   def self.non_merged?
-    read_config
-    @@non_merged
+    !!self.non_merged
   end
 
-  def self.non_merged
-    read_config
-    @@non_merged
-  end
+  #def self.cutoff
+  #  read_config
+  #  @@cutoff
+  #end
+  #
+  #def self.output
+  #  read_config
+  #  @@output
+  #end
+  #
+  #def self.non_merged?
+  #  read_config
+  #  @@non_merged
+  #end
+  #
+  #def self.non_merged
+  #  read_config
+  #  @@non_merged
+  #end
 
   OUTPUT_VARIABLES = %w(%a %b %c)
 
