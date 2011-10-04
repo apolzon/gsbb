@@ -1,10 +1,49 @@
+require 'yaml'
 class GsbbWorker
 
-  def self.cutoff; end
-  def self.output; end
-  def self.non_merged?; end
-  def self.non_merged; end
-  def self.output_variables; end
+  def self.read_config
+    if File.exists?("#{ENV['HOME']}/.gsbb")
+      configuration = File.read("#{ENV['HOME']}/.gsbb", "r")
+      parsed_config = YAML.parse(configuration)
+      config_elements = parsed_config.children
+      begin
+        key_scalar, value_scalar = config_elements.slice!(0..1)
+        class_variable_set("@@#{key_scalar.value}".to_sym, value_scalar.value)
+      end while config_elements.count != 0
+      @@cutoff = @@cutoff.to_i
+      @@non_merged = eval(@@non_merged) if ["true", "false", ""].include?(@@non_merged)
+    else
+      @@cutoff = 21
+      @@output = "some format string"
+      @@non_merged = true
+    end
+  end
+
+  def self.cutoff
+    read_config
+    @@cutoff
+  end
+
+  def self.output
+    read_config
+    @@output
+  end
+
+  def self.non_merged?
+    read_config
+    @@non_merged
+  end
+
+  def self.non_merged
+    read_config
+    @@non_merged
+  end
+
+  OUTPUT_VARIABLES = %w(%a %b %c)
+
+  def self.output_variables
+    OUTPUT_VARIABLES.join(", ")
+  end
 
   def config
     # how do we want to do this?

@@ -8,7 +8,6 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'support', 'capture_s
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'gsbb'))
 require 'mocha'
-ENV['test'] = 'true'
 
 describe Gsbb do
   describe "#config" do
@@ -43,6 +42,7 @@ describe Gsbb do
     describe "flags" do
       it "allows setting the cut-off date" do
         Gsbb.start(["config", "--cutoff=15"])
+        # verify it updates the config file
       end
       it "allows setting the branch exclusion rule"
       it "allows configuring the output style"

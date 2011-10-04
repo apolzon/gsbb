@@ -6,9 +6,7 @@ class Gsbb < Thor
   desc "config", "Configure overrides to default behavior"
   method_options :cutoff => :numeric, :output => :string, :non_merged => :boolean
   def config
-    p options
     # options.force? # options['alias'] # options[:alias]
-    test = "hi"
     if options.keys == []
       puts <<-EOS
         Configure [--cutoff=number_of_days --output="formatted string" --no-non-merged]
