@@ -20,13 +20,20 @@ describe Gsbb do
     end
 
     describe "no params" do
-      it "outputs current options" do
-        output = capture_stdout do
-          Gsbb.start(["config"])
-        end
-        output.must_match /cutoff/
-        output.must_match /output/
-        output.must_match /non-merged/
+      it "outputs option descriptions" do
+        output = capture_stdout { Gsbb.start(["config"]) }
+        output.must_match /Cutoff:/
+        output.must_match /Output:/
+        output.must_match /Include non-merged/
+      end
+      it "outputs current option values" do
+        GsbbWorker.expects(:cutoff).returns("MYCUTOFF")
+        GsbbWorker.expects(:output).returns("MYOUTPUTSTRING")
+        GsbbWorker.expects(:non_merged?).returns(true)
+        output = capture_stdout { Gsbb.start(["config"]) }
+        output.must_match /MYCUTOFF/
+        output.must_match /MYOUTPUTSTRING/
+        output.must_match /true/
       end
     end
     describe "flags" do
