@@ -41,8 +41,9 @@ describe Gsbb do
     end
     describe "flags" do
       it "allows setting the cut-off date" do
-        Gsbb.start(["config", "--cutoff=15"])
-        # TODO: verify it updates the config file
+        GsbbWorker.any_instance.stubs(:write_config)
+        output = capture_stdout { Gsbb.start(["config", "--cutoff=15"]) }
+        output.must_match /Successfully updated cutoff date to 15 days/
       end
       it "allows setting the branch exclusion rule"
       it "allows configuring the output style"

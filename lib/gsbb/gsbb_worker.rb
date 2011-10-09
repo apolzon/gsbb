@@ -17,6 +17,7 @@ class GsbbWorker
       @@output = "some format string"
       @@non_merged = true
     end
+    @@config_read = true
   end
 
   def self.method_missing(method_name, *args)
@@ -38,7 +39,30 @@ class GsbbWorker
     OUTPUT_VARIABLES.join(", ")
   end
 
-  def config
+  def self.current_config
+    if !defined?(@@config_read) || !@@config_read
+      read_config
+    end
+    {
+      :cutoff => @@cutoff,
+      :output => @@output,
+      :non_merged => @@non_merged
+    }
+  end
+
+  def config(options)
+    puts "config"
+    puts self.class.current_config
+    current_options = self.class.current_config
+    new_options = current_options.merge(options)
+    write_config new_options
+    puts "Successfully updated cutoff date to #{options[:cutoff]} days" if options[:cutoff]
+  end
+
+  def write_config(options)
+    File.open("#{ENV['HOME']}/.gsbb", "w") do |file|
+      file << options.to_yaml
+    end
   end
 
   def show

@@ -15,7 +15,6 @@ describe GsbbWorker do
     GsbbWorker.class_variables.each do |class_var|
       GsbbWorker.class_variable_set(class_var, nil)
     end
-    GsbbWorker.class_variable_set(:@@cutoff, nil)
   end
 
   describe ".read_config" do
@@ -36,6 +35,7 @@ describe GsbbWorker do
     end
     describe "no config file exists" do
       it "uses defaults" do
+        File.stubs(:exists?).with("#{ENV['HOME']}/.gsbb").returns(false)
         GsbbWorker.read_config
         GsbbWorker.cutoff.must_equal 21
         GsbbWorker.output.wont_be_nil
@@ -75,9 +75,51 @@ describe GsbbWorker do
     end
   end
 
-  #describe ".output_variables"
-  #
-  #describe "#config"
+  describe ".current_config" do
+    it "returns defaults when no config exists" do
+      GsbbWorker.expects(:read_config)
+      GsbbWorker.class_exec do
+        @@config_read = false
+        @@cutoff = 15
+        @@output = "some format string"
+        @@non_merged = true
+      end
+      GsbbWorker.current_config.must_equal({:cutoff => 15, :output => "some format string", :non_merged => true})
+    end
+    it "doesn't read from file system unnecessarily" do
+      GsbbWorker.class_exec do
+        @@config_read = true
+        @@cutoff = 1
+        @@output = "testme"
+        @@non_merged = false
+      end
+      GsbbWorker.expects(:read_config).never
+      GsbbWorker.current_config.must_equal({:cutoff => 1, :output => "testme", :non_merged => false})
+    end
+  end
+
+  describe "#config" do
+    describe "hash of optional parameters" do
+      describe "cutoff" do
+        describe "when present" do
+          before do
+            GsbbWorker.any_instance.expects(:write_config).with({:cutoff => 15, :output => "some format string", :non_merged => true})
+            @output = capture_stdout { GsbbWorker.new.config(:cutoff => 15) }
+          end
+          it "outputs updated value" do
+            @output.must_match /Successfully updated cutoff date to 15 days/
+          end
+        end
+        describe "when not present" do
+          it "does nothing" do
+            GsbbWorker.any_instance.expects(:write_config).with({:cutoff => 21, :output => "some format string", :non_merged => true})
+            output = capture_stdout { GsbbWorker.new.config({}) }
+            output.wont_match /Successfully updated cutoff date/
+          end
+        end
+      end
+    end
+  end
   #describe "#show"
   #describe "#prune"
   #describe "#email"

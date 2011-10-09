@@ -27,7 +27,12 @@ class Gsbb < Thor
 
       EOS
     else
-      worker = GsbbWorker.new.config
+      puts "options: #{options}"
+      parsed_options = {}
+      parsed_options[:cutoff] = options["cutoff"] if options["cutoff"]
+      parsed_options[:output] = options["output"] if options["output"]
+      parsed_options[:non_merged] = options["non_merged"] if options["non_merged"]
+      worker = GsbbWorker.new.config(parsed_options)
     end
   end
 
